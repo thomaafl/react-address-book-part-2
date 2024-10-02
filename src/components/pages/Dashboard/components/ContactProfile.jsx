@@ -39,6 +39,8 @@ export default function ContactsProfile() {
             <h4>Street: {contact.street}</h4>
             <button className="deleteButton" onClick={deleteContact}>Delete contact</button>
             
+            <Link to={`/update/${contact.id}`}>Update Contact</Link>
+            <Link to="/contacts">Back to Contacts</Link>
         </article>
     )
 }

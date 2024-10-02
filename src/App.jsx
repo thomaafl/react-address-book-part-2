@@ -22,27 +22,13 @@ function App() {
         city: ""
     })
 
-    const baseURL = "https://boolean-uk-api-server.fly.dev"
-
-    /*
-    const fetchData = async() => {
-        try {
-            const response = await fetch(baseURL)
-            const jsonData = await response.json()
-            console.log(jsonData)
-            setContacts(jsonData.results)
-        } catch(error) {
-            console.error("error fetching data", error)
-        }
-    }
-    useEffect(() => {
-        fetchData()
-    }, [])
-    */
-
     const fetchContacts = async () => {
-        const result = await GetAllContacts()
-        setContacts(result)
+        try{
+            const result = await GetAllContacts()
+            setContacts(result)
+        } catch (error) {
+            console.error("Error in fetching contacts: " + error);
+        }
     }
     useEffect(() => {
         fetchContacts()
@@ -56,6 +42,7 @@ function App() {
                     <Route path="/contacts" element={<ContactsList/>}></Route>
                     <Route path="/view/:id" element = {<ContactsProfile/>}></Route>
                     <Route path="create" element = {<CreateContactsForm/>}></Route>
+                    <Route path="/update/:id" element={<CreateContactsForm />} />
 
                 </Routes>
             </div>

@@ -1,29 +1,56 @@
 
 import { useEffect, useContext, useState} from 'react'
 import { AppContext } from "../../../App";
-import { useNavigate } from 'react-router-dom';
-import { CreateContact } from '../../ContactAPI/ContactAPIs';
+import { useNavigate, useParams } from 'react-router-dom';
+import { CreateContact, UpdateContact } from '../../ContactAPI/ContactAPIs';
 
 
 
 export default function CreateContactsForm() {
     const { formData, setFormData, contacts, setContacts } = useContext(AppContext)
     const navigate = useNavigate()
-
+    
+    const { id } = useParams();
+    const editing = Boolean(id)
 
     const handleChange = (event) => {
-        const {name, value, type} = event.target
-        setFormData({...formData, [name]: value})
+        const {name, value} = event.target
+        setFormData((prev) => ({...prev, [name] : value}));
     }
 
+    useEffect(() => {
+        if (editing) {
+            const contactToEdit = contacts.find((c) => c.id === Number(id));
+            if (contactToEdit) {
+                setFormData(contactToEdit);
+            }
+        }
+    }, [id, setFormData, editing]);
+
     const handleSubmit = (event) => {
-        event.preventDefault()
+        event.preventDefault();
+        if (formData.firstName === "" || formData.lastName === "" || formData.street === "" || formData.city === "") {
+            console.log("fill out the form properly please :)");
+            return;
+        }
+        if (editing) {
+            UpdateContact(id, formData)
+            resetForm()
+            setContacts((prev) => 
+                prev.map((contact) => 
+                contact.id === Number(id) ? {...contact, ...formData} : contact)
+            );
+            navigate(`/view/${id}`)
+        }
+        else {
+            CreateContact(formData)
+            resetForm()
+    
+            navigate("/contacts")
+        }
         //setFormData(formData)
         //setContacts([...contacts, formData])
-        CreateContact(formData)
-        resetForm()
-
-        navigate("/contacts")
+        
 
     }
 
@@ -46,7 +73,7 @@ export default function CreateContactsForm() {
             <h3>Enter your address: </h3>
             <input type="text" name="street" onChange={handleChange} value ={formData.street}></input>
             <h3> </h3>
-            <input className="form_submit" type="submit" value="Add Contact!"></input>
+            <input className="form_submit" type="submit" value={editing ? "Save Changes" : "Submit Contact"}></input>
         </form>
         </>
     )

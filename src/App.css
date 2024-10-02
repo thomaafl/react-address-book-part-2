@@ -18,3 +18,8 @@
     display: flex;
     flex-direction: column;
 }
+
+.viewContact {
+    display: flex;
+    flex-direction: column;
+}

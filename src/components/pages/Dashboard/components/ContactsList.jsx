@@ -4,6 +4,7 @@ import { AppContext } from "../../../../App"
 import { Link, Routes, Route } from 'react-router-dom'
 
 import ContactsListItem from "./ContactsListItem"
+import { DeleteAllContacts } from "../../../ContactAPI/ContactAPIs"
 
 export default function ContactsList() {
     const { contacts } = useContext(AppContext)
@@ -14,6 +15,8 @@ export default function ContactsList() {
             {contacts.map((contact, index) => (
                 <ContactsListItem key={index} contact={contact} />
             ))}
+            
+            
         </ul>
     )
 }
